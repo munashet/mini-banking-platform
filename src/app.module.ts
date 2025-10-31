@@ -11,43 +11,24 @@ import { AccountsModule } from './accounts/accounts.module';
 
 @Module({
   imports: [
-    // Load environment variables globally
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
-    }),
-
-    // Rate limiting
-    ThrottlerModule.forRoot([
-      {
-        ttl: 60_000, // 60 seconds
-        limit: 100,
-      },
-    ]),
-
-    // Database connection
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
+    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }]),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
+      useFactory: (config: ConfigService) => ({
         type: 'postgres',
-        url: configService.get<string>('DATABASE_URL'),
+        url: config.get('DATABASE_URL'),
         entities: [User, Account],
         synchronize: false,
         logging: process.env.NODE_ENV === 'development',
-        ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
       }),
       inject: [ConfigService],
     }),
-
-    // Feature modules
     AuthModule,
     AccountsModule,
   ],
   providers: [
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
   ],
 })
 export class AppModule {}

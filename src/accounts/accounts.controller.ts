@@ -10,7 +10,7 @@ import {
 } from '@nestjs/swagger';
 
 @ApiTags('accounts')
-@Controller('accounts')
+@Controller('api/accounts')
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('JWT-auth')
 export class AccountsController {
