@@ -5,9 +5,11 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
   Index,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { Account } from '../../accounts/entities/account.entity'; // ← Re-added
 
 @Entity('users')
 @Index('idx_users_email', ['email'], { unique: true })
@@ -31,5 +33,10 @@ export class User {
   @UpdateDateColumn({ type: 'timestamptz' })
   updated_at: Date;
 
-  // TODO: Add @OneToMany(() => Account, ...) after Account entity exists
+  // ← Relation restored
+  @OneToMany(() => Account, (account) => account.user, {
+    cascade: true,
+    eager: false,
+  })
+  accounts: Account[];
 }

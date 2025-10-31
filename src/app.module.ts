@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'; // ← Fixed: was TypeOrm20Modu
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { User } from './auth/entities/user.entity';
+import { Account } from './accounts/entities/account.entity';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { User } from './auth/entities/user.entity';
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: configService.get<string>('DATABASE_URL'),
-        entities: [User],
+        entities: [User, Account],
         synchronize: false,
         logging: process.env.NODE_ENV === 'development',
         ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
