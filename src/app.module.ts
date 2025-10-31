@@ -1,26 +1,38 @@
 // src/app.module.ts
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm'; // ← Fixed: was TypeOrm20Module
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { User } from './auth/entities/user.entity';
 
 @Module({
   imports: [
-    // Load .env globally
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
 
-    // Rate limiting
     ThrottlerModule.forRoot([
       {
-        ttl: 60_000, // 60 seconds
+        ttl: 60_000,
         limit: 100,
       },
     ]),
-    // We'll add TypeORM after creating entities
-    // We'll add AuthModule, AccountsModule, etc. later
+
+    // TypeORM with async config
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        url: configService.get<string>('DATABASE_URL'),
+        entities: [User],
+        synchronize: false,
+        logging: process.env.NODE_ENV === 'development',
+        ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+      }),
+      inject: [ConfigService],
+    }),
   ],
   providers: [
     {
