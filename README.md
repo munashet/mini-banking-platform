@@ -14,8 +14,8 @@ Uses **NestJS + TypeORM + PostgreSQL** on the backend, **Next.js** (planned) on 
 | Folder & file structure       | Done     |
 | `.env`, `.gitignore`, README  | Done     |
 | Git initialized & first commit| Done     |
-| `AuthModule` (in progress)    | In Progress   |
-| Double-entry ledger           | Not Started   |
+| `AuthModule` (in progress)    | Done     |
+| Double-entry ledger           | In Progress   |
 | Transfer & Exchange           | Not Started   |
 | Frontend (Next.js)            | Not Started   |
 
