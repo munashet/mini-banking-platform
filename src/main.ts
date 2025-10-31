@@ -2,52 +2,32 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Global prefix: /api
+  // === CRITICAL: Set prefix BEFORE using ConfigService ===
   app.setGlobalPrefix('api');
+  app.enableVersioning({ type: VersioningType.URI, defaultVersion: '1' });
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+  app.enableCors({ origin: true, credentials: true });
 
-  // Versioning: /api/v1/...
-  app.enableVersioning({
-    type: VersioningType.URI,
-    defaultVersion: '1',
-  });
-
-  // Auto-validate DTOs
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
-  );
-
-  // CORS (allow Next.js frontend)
-  app.enableCors({
-    origin: true,
-    credentials: true,
-  });
-
-  // Swagger Setup
+  // === Swagger ===
   const config = new DocumentBuilder()
     .setTitle('Mini Banking Platform')
-    .setDescription('Double-entry banking with USD/EUR wallets')
+    .setDescription('Double-entry banking system')
     .setVersion('1.0')
-    .addBearerAuth(
-      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
-      'JWT-auth',
-    )
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'JWT-auth')
     .build();
-
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document, {
-    swaggerOptions: { persistAuthorization: true },
-  });
+  SwaggerModule.setup('api/docs', app, document);
 
-  const port = process.env.PORT || 3000;
+  // === Get ConfigService AFTER app is created ===
+  const configService = app.get(ConfigService);
+  const port = configService.get<number>('PORT') || 3001;
+
   await app.listen(port);
 
   console.log(`Server running on http://localhost:${port}/api`);

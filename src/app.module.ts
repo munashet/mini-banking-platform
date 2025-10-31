@@ -1,29 +1,31 @@
 // src/app.module.ts
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm'; // ← Fixed: was TypeOrm20Module
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { User } from './auth/entities/user.entity';
 import { Account } from './accounts/entities/account.entity';
 import { AuthModule } from './auth/auth.module';
+import { AccountsModule } from './accounts/accounts.module';
 
 @Module({
   imports: [
-    AuthModule,
+    // Load environment variables globally
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
 
+    // Rate limiting
     ThrottlerModule.forRoot([
       {
-        ttl: 60_000,
+        ttl: 60_000, // 60 seconds
         limit: 100,
       },
     ]),
 
-    // TypeORM with async config
+    // Database connection
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -36,6 +38,10 @@ import { AuthModule } from './auth/auth.module';
       }),
       inject: [ConfigService],
     }),
+
+    // Feature modules
+    AuthModule,
+    AccountsModule,
   ],
   providers: [
     {
