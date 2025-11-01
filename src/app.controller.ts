@@ -1,14 +1,13 @@
 // src/app.controller.ts
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { AppService } from './app.service';
 
-@Controller('api/auth')
+@Controller()
 export class AppController {
-  @Post('login')
-  login(@Body() body: any) {
-    return {
-      message: 'LOGIN WORKS!',
-      email: body.email,
-      password: body.password,
-    };
+  constructor(private readonly appService: AppService) {}
+
+  @Get()
+  getHello(): string {
+    return this.appService.getHello();
   }
 }

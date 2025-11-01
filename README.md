@@ -5,11 +5,11 @@ Uses **NestJS + TypeORM + PostgreSQL** on the backend.
 
 ---
 
-## Status: **Authentication & Routing Stable**
+## Status: **Core Banking Engine Complete**
 
 | Milestone                     | Status   |
 |-------------------------------|----------|
-| NestJS server (`/api`)        | Done     |
+| NestJS server (`/api/v1`)     | Done     |
 | Swagger UI (`/api/docs`)      | Done     |
 | Folder & file structure       | Done     |
 | `.env`, `.gitignore`, README  | Done     |
@@ -18,9 +18,8 @@ Uses **NestJS + TypeORM + PostgreSQL** on the backend.
 | `AccountsModule` with balances| Done     |
 | **404 routing issues fixed**  | Done     |
 | Double-entry ledger           | Done     |
-| Transfer & Exchange           | Done     |
-| Debugging                     | In Progress   |
-| Frontend (Next.js)            | Not Started   |
+| Transfer (same currency)      | Done     |
+| Frontend (Next.js)            | Done.    |
 
 ---
 
@@ -28,7 +27,7 @@ Uses **NestJS + TypeORM + PostgreSQL** on the backend.
 
 | Layer       | Technology                              |
 |-------------|-----------------------------------------|
-| Backend     | **NestJS** (v10)                        |
+| Backend     | **NestJS** (v11)                        |
 | Database    | **PostgreSQL** + **TypeORM**            |
 | Auth        | **JWT** + `bcrypt`                      |
 | Validation  | `class-validator` + `zod`               |
