@@ -37,4 +37,13 @@ Uses **NestJS + TypeORM + PostgreSQL** on the backend.
 
 ---
 
-## Project Structure
+
+---
+
+## Login Credentials
+
+| Username                      | Password.   |
+|-------------------------------|----------   |
+| alice@example.com             | password123 |
+| bob@example.com               | password123 |
+| charlie@example.com           | password123 |
