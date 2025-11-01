@@ -17,8 +17,9 @@ Uses **NestJS + TypeORM + PostgreSQL** on the backend.
 | `AuthModule` with JWT login   | Done     |
 | `AccountsModule` with balances| Done     |
 | **404 routing issues fixed**  | Done     |
-| Double-entry ledger           | Not Started   |
-| Transfer & Exchange           | Not Started   |
+| Double-entry ledger           | Done     |
+| Transfer & Exchange           | Done     |
+| Debugging                     | In Progress   |
 | Frontend (Next.js)            | Not Started   |
 
 ---
