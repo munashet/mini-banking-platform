@@ -1,23 +1,27 @@
 // src/database/seed.ts
 import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { User } from '../auth/entities/user.entity';
-import { Account } from '../accounts/entities/account.entity';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 async function seed() {
   const dataSource = new DataSource({
     type: 'postgres',
     url: process.env.DATABASE_URL,
-    entities: [User, Account],
+    // ONLY LOAD User and Account entities
+    entities: [
+      'src/auth/entities/user.entity.ts',
+      'src/accounts/entities/account.entity.ts',
+    ],
     logging: false,
   });
 
   await dataSource.initialize();
 
-  const userRepo = dataSource.getRepository(User);
-  const accountRepo = dataSource.getRepository(Account);
+  const userRepo = dataSource.getRepository('User');
+  const accountRepo = dataSource.getRepository('Account');
 
-  // Clear existing data
   await accountRepo.delete({});
   await userRepo.delete({});
 
@@ -33,13 +37,13 @@ async function seed() {
     const user = userRepo.create({ ...userData, password_hash });
     await userRepo.save(user);
 
-    // Create USD & EUR accounts
-    const usd = accountRepo.create({ user, currency: 'USD', balance: '1000.00' });
-    const eur = accountRepo.create({ user, currency: 'EUR', balance: '500.00' });
-    await accountRepo.save([usd, eur]);
+    await accountRepo.save([
+      { user, currency: 'USD', balance: '1000.00' },
+      { user, currency: 'EUR', balance: '500.00' },
+    ]);
   }
 
-  console.log('3 users seeded with USD: $1000.00, EUR: €500.00');
+  console.log('Seeded 3 users with USD/EUR accounts');
   await dataSource.destroy();
 }
 

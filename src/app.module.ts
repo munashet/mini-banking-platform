@@ -8,6 +8,7 @@ import { User } from './auth/entities/user.entity';
 import { Account } from './accounts/entities/account.entity';
 import { AuthModule } from './auth/auth.module';
 import { AccountsModule } from './accounts/accounts.module';
+import { TransactionsModule } from './transactions/transactions.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AccountsModule } from './accounts/accounts.module';
     }),
     AuthModule,
     AccountsModule,
+    TransactionsModule,
   ],
   providers: [
     { provide: APP_GUARD, useClass: ThrottlerGuard },

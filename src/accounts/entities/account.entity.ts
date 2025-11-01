@@ -7,14 +7,19 @@ import {
   Index,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 import { User } from '../../auth/entities/user.entity';
+import { Ledger  } from 'src/ledger/entities/ledger.entity';
 
 @Entity('accounts')
 @Index('idx_accounts_user_currency', ['user', 'currency'], { unique: true })
 export class Account {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @OneToMany(() => Ledger, (ledger) => ledger.account)
+  ledgerEntries: Ledger[];
 
   @ManyToOne(() => User, (user) => user.accounts, {
     onDelete: 'CASCADE',
