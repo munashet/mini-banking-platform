@@ -40,10 +40,20 @@ Uses **NestJS + TypeORM + PostgreSQL** on the backend.
 
 ---
 
-## Login Credentials
+## URLs
 
-| Username                      | Password.   |
+| Name                          | URL                                        |
+|-------------------------------|-----------------------------------------   |
+| Bank-End Web Service          | https://mini-banking-platform.onrender.com |
+| Front-End                     | https://mini-banking-app-five.vercel.app/  |
+
+## Mini Banking App Login Credentials
+
+| Username                      | Password    |
 |-------------------------------|----------   |
 | alice@example.com             | password123 |
 | bob@example.com               | password123 |
 | charlie@example.com           | password123 |
+
+
+
